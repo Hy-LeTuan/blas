@@ -10,6 +10,6 @@ extern double nrm2(double *a, ll n);
 extern double *scale(double *a, double x, ll n);
 extern void swap(double *a, double *b, ll n);
 extern double assum(double *a, ll n);
-extern double *iamax(double *a, ll n);
+extern double iamax(double *a, ll n);
 
 #endif
