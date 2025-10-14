@@ -48,7 +48,7 @@ double nrm2(double *a, ll n) {
     return sqrt(dot(a, a, n));
 }
 
-double *scale(double *a, double x, ll n) {
+double *scal(double *a, double x, ll n) {
     if (n <= 0)
         return NULL;
 
