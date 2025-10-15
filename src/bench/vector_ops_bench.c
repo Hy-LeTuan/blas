@@ -1,10 +1,13 @@
 #include <allocate_utils.h>
 #include <assert.h>
+#include <blas_types.h>
 #include <stdlib.h>
 #include <vector_ops.h>
 #include <vector_ops_bench.h>
 
-void axpy_bench(ll n) {
+void axpy_bench(benchmark_info *info) {
+    ll n = info->n;
+
     double x = 2.0f;
     double y = 3.0f;
 
@@ -17,7 +20,20 @@ void axpy_bench(ll n) {
     }
 }
 
-void swap_bench(ll n) {
+void dot_bench(benchmark_info *info) {
+    ll n = info->n;
+
+    double *a = vec_double_init_linspace(n);
+    double *b = vec_double_init_linspace(n);
+
+    double c = dot(a, b, n);
+
+    assert(c != 0.0);
+}
+
+void swap_bench(benchmark_info *info) {
+    ll n = info->n;
+
     double *a = vec_double_init_linspace(n);
     double *b = vec_double_init_linspace(n);
 
@@ -40,7 +56,21 @@ void swap_bench(ll n) {
     }
 }
 
-void iamax_bench(ll n) {
+void assum_bench(benchmark_info *info) {
+    ll n = info->n;
+
+    double *a = vec_double_init_linspace(n);
+
+    double sum = iamax(a, n);
+
+    assert(sum != 0.0);
+
+    return;
+}
+
+void iamax_bench(benchmark_info *info) {
+    ll n = info->n;
+
     double *a = vec_double_init_linspace(n);
 
     ll index = iamax(a, n);

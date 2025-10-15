@@ -3,9 +3,10 @@
 
 #include <blas_types.h>
 
-void axpy_bench(ll n);
-void swap_bench(ll n);
-void assum_bench(ll n);
-void iamax_bench(ll n);
+void axpy_bench(benchmark_info *info);
+void dot_bench(benchmark_info *info);
+void swap_bench(benchmark_info *info);
+void assum_bench(benchmark_info *info);
+void iamax_bench(benchmark_info *info);
 
 #endif
