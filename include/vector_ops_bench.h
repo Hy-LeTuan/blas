@@ -3,9 +3,9 @@
 
 #include <blas_types.h>
 
-void axpy_test(ll n);
-void swap_test(ll n);
-void assum_test(ll n);
-void iamax_test(ll n);
+void axpy_bench(ll n);
+void swap_bench(ll n);
+void assum_bench(ll n);
+void iamax_bench(ll n);
 
 #endif

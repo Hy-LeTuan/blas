@@ -4,7 +4,7 @@
 #include <vector_ops.h>
 #include <vector_ops_bench.h>
 
-void axpy_test(ll n) {
+void axpy_bench(ll n) {
     double x = 2.0f;
     double y = 3.0f;
 
@@ -17,7 +17,7 @@ void axpy_test(ll n) {
     }
 }
 
-void swap_test(ll n) {
+void swap_bench(ll n) {
     double *a = vec_double_init_linspace(n);
     double *b = vec_double_init_linspace(n);
 
@@ -40,7 +40,7 @@ void swap_test(ll n) {
     }
 }
 
-void iamax_test(ll n) {
+void iamax_bench(ll n) {
     double *a = vec_double_init_linspace(n);
 
     ll index = iamax(a, n);
