@@ -1,5 +1,5 @@
-#ifndef _VECTOR_OPS_BENCH_H
-#define _VECTOR_OPS_BENCH_H
+#ifndef _VECTOR_VECTOR_OPS_BENCH_H
+#define _VECTOR_VECTOR_OPS_BENCH_H
 
 #include <blas_types.h>
 

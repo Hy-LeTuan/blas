@@ -2,21 +2,21 @@
 #include <assert.h>
 #include <blas_types.h>
 #include <stdlib.h>
-#include <vector_ops.h>
-#include <vector_ops_bench.h>
+#include <vector_vector_ops.h>
+#include <vector_vector_ops_bench.h>
 
 void axpy_bench(benchmark_info *info) {
     ll n = info->n;
 
-    double x = 2.0f;
-    double y = 3.0f;
+    double a = 2.0f;
 
-    double *a = vec_double_init_linspace(n);
+    double *x = vec_double_init_linspace(n);
+    double *y = vec_double_init_linspace(n);
 
     double *res = axpy(a, x, y, n);
 
     for (ll i = 0; i < n; i++) {
-        assert(res[i] == a[i] * x + y);
+        assert(res[i] == x[i] * y[i] + a);
     }
 }
 

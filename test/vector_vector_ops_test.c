@@ -1,20 +1,46 @@
 #include <allocate_utils.h>
 #include <assert.h>
 #include <math.h>
-#include <stdio.h>
-#include <vector_ops.h>
-#include <vector_ops_test.h>
+#include <vector_vector_ops.h>
+#include <vector_vector_ops_test.h>
 
-void axpy_test(ll n) {
-    double x = 2.0f;
-    double y = 3.0f;
-
-    double *a = vec_double_init_rand(n);
-
-    double *res = axpy(a, x, y, n);
+void scal_test(ll n) {
+    double *x = vec_double_init_rand(n);
+    double scalar = 3.0;
+    double *out = scal(x, scalar, n);
 
     for (ll i = 0; i < n; i++) {
-        assert(res[i] == a[i] * x + y);
+        assert(out[i] == x[i] * scalar);
+    }
+}
+
+void axpy_no_alpha_test(ll n) {
+    double *x = vec_double_init_rand(n);
+    double *y = vec_double_init_rand(n);
+
+    double *out = axpy_no_alpha(x, y, n);
+
+    for (ll i = 0; i < n; i++) {
+        assert(out[i] == x[i] + y[i]);
+    }
+}
+
+/*
+ * The testing function for the axpy operation. This test should only be called
+ * after scal_test and axpy_no_alpha_test has passed.
+ */
+void axpy_test(ll n) {
+    double a = 3.0f;
+
+    double *x = vec_double_init_rand(n);
+    double *y = vec_double_init_rand(n);
+
+    double *out = axpy(a, x, y, n);
+
+    double *test_out = axpy_no_alpha(scal(x, a, n), y, n);
+
+    for (ll i = 0; i < n; i++) {
+        assert(out[i] == test_out[i]);
     }
 }
 
@@ -77,6 +103,8 @@ void iamax_test(ll n) {
 int main() {
     ll n = 2000000;
 
+    scal_test(n);
+    axpy_no_alpha_test(n);
     axpy_test(n);
     copy_test(n);
     swap_test(n);

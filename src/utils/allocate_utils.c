@@ -20,3 +20,23 @@ double *vec_double_init_rand(ll n) {
 
     return out;
 }
+
+double **mat_double_init_linspace(ll m, ll n) {
+    double **a = malloc(sizeof(double *) * m);
+
+    for (ll i = 0; i < m; i++) {
+        a[i] = vec_double_init_linspace(n);
+    }
+
+    return a;
+}
+
+double **mat_double_init_rand(ll m, ll n) {
+    double **a = malloc(sizeof(double *) * m);
+
+    for (ll i = 0; i < m; i++) {
+        a[i] = vec_double_init_rand(n);
+    }
+
+    return a;
+}

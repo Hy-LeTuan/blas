@@ -1,7 +1,6 @@
 #include "blas_types.h"
-#include "vector_ops_bench.h"
+#include "vector_vector_ops_bench.h"
 #include <bench.h>
-#include <stdio.h>
 #include <time_utils.h>
 
 /*

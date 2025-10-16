@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <vector_ops_bench.h>
+#include <vector_vector_ops_bench.h>
 
 static int parse_opt(int key, char *arg, struct argp_state *state) {
     benchmark_info *info_ref = state->input;
