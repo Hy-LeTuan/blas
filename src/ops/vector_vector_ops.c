@@ -10,7 +10,8 @@
  * @param n: The length n
  * @returns: Returns a pointer to a vector fo size n
  */
-double *axpy_no_alpha(double *x, double *y, ll n) {
+double *axpy_no_alpha(double *x, double *y, ll n)
+{
     if (n <= 0)
         return NULL;
 
@@ -32,7 +33,8 @@ double *axpy_no_alpha(double *x, double *y, ll n) {
  * @param n: The length n
  * @returns: Returns a pointer to a vector fo size n
  */
-double *axpy(double a, double *x, double *y, ll n) {
+double *axpy(double a, double *x, double *y, ll n)
+{
     if (n <= 0)
         return NULL;
 
@@ -45,7 +47,8 @@ double *axpy(double a, double *x, double *y, ll n) {
     return out;
 }
 
-double *copy(double *a, ll n) {
+double *copy(double *a, ll n)
+{
     if (n <= 0)
         return NULL;
 
@@ -58,7 +61,8 @@ double *copy(double *a, ll n) {
     return out;
 };
 
-double dot(double *x, double *y, ll n) {
+double dot(double *x, double *y, ll n)
+{
     if (n <= 0)
         return 0.0f;
 
@@ -71,14 +75,16 @@ double dot(double *x, double *y, ll n) {
     return out;
 }
 
-double nrm2(double *x, ll n) {
+double nrm2(double *x, ll n)
+{
     if (n <= 0)
         return 0.0f;
 
     return sqrt(dot(x, x, n));
 }
 
-double *scal(double *x, double a, ll n) {
+double *scal(double *x, double a, ll n)
+{
     if (n <= 0)
         return NULL;
 
@@ -91,7 +97,8 @@ double *scal(double *x, double a, ll n) {
     return out;
 }
 
-void swap(double *a, double *b, ll n) {
+void swap(double *a, double *b, ll n)
+{
     if (n <= 0)
         return;
 
@@ -104,7 +111,8 @@ void swap(double *a, double *b, ll n) {
     }
 }
 
-double assum(double *a, ll n) {
+double assum(double *a, ll n)
+{
     if (n <= 0)
         return 0.0f;
 
@@ -121,7 +129,8 @@ double assum(double *a, ll n) {
  * Find the index of the maximal element of the vector. If there are multiple
  * maximal elements, return the index of the first occurence.
  */
-double iamax(double *a, ll n) {
+double iamax(double *a, ll n)
+{
     if (n <= 0)
         return -1.0f;
 

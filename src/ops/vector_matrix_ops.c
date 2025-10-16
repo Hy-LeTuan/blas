@@ -14,7 +14,8 @@
  * @param m: The length m
  * @returns: A vector of length m
  */
-double *simplified_gemv_row(double **a, double *x, double *y, ll m, ll n) {
+double *simplified_gemv_row(double **a, double *x, double *y, ll m, ll n)
+{
     double *out = malloc(sizeof(double) * m);
 
     for (int i = 0; i < m; i++) {
