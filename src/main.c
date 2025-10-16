@@ -4,6 +4,7 @@
 #include <error_messages.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <vector_ops_bench.h>
 
 static int parse_opt(int key, char *arg, struct argp_state *state) {
@@ -28,6 +29,8 @@ static int parse_opt(int key, char *arg, struct argp_state *state) {
 }
 
 int main(int argc, char *argv[]) {
+    srand(time(NULL));
+
     benchmark_info info = {.n = 10000, .f = INVALID_FUNC};
 
     struct argp_option options[] = {
