@@ -10,8 +10,10 @@ incdir = include_directories('include')
 core_sources = [
   './src/ops/vector_ops.c',
   './src/utils/allocate_utils.c',
+  './src/utils/time_utils.c',
   './src/utils/blas_types.c',
-  './src/bench/vector_ops_bench.c'
+  './src/bench/vector_ops_bench.c',
+  './src/bench/bench.c',
 ]
 
 executable_sources = core_sources + [

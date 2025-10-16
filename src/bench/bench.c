@@ -1,5 +1,8 @@
+#include "blas_types.h"
 #include "vector_ops_bench.h"
 #include <bench.h>
+#include <stdio.h>
+#include <time_utils.h>
 
 /*
  * The actuator function to run the specificed function from `info` with all the
@@ -8,7 +11,7 @@
 void run_function(benchmark_info *info) {
     switch (info->f) {
     case AXPY:
-        axpy_bench(info);
+        time_function(info, &axpy_bench);
         break;
     case COPY:
         break;
@@ -19,13 +22,13 @@ void run_function(benchmark_info *info) {
     case SCAL:
         break;
     case SWAP:
-        swap_bench(info);
+        time_function(info, &swap_bench);
         break;
     case ASSUM:
-        assum_bench(info);
+        time_function(info, &assum_bench);
         break;
     case IAMAX:
-        iamax_bench(info);
+        time_function(info, &iamax_bench);
         break;
     case INVALID_FUNC:
         return;
@@ -36,4 +39,4 @@ void run_function(benchmark_info *info) {
  * The main function to run the benchmark. From this function, other functions
  * that could actually handle the function running is called.
  */
-void bench(benchmark_info *info) {}
+void bench(benchmark_info *info) { run_function(info); }

@@ -1,4 +1,5 @@
 #include <argp.h>
+#include <bench.h>
 #include <blas_types.h>
 #include <error_messages.h>
 #include <stdio.h>
@@ -46,6 +47,8 @@ int main(int argc, char *argv[]) {
         printf(ERROR_NO_FUNCTION_FOUND);
         return 1;
     }
+
+    bench(&info);
 
     return 0;
 }

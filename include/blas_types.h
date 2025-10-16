@@ -22,4 +22,6 @@ typedef struct {
     enum VALID_FUNCTIONS f;
 } benchmark_info;
 
+typedef void (*BENCHMARK_FUNC)(benchmark_info *info);
+
 #endif
