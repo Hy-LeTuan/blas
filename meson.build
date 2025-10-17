@@ -9,35 +9,36 @@ incdir = include_directories('include')
 
 core_sources = [
   # main modules
-  './src/bench/bench.c',
+  'src/bench/bench.c',
   # general
-  './src/utils/blas_types.c',
+  'src/utils/blas_types.c',
   # operation implementations
-  './src/ops/vector_vector_ops.c',
+  'src/ops/vector_vector_ops.c',
   'src/ops/vector_matrix_ops.c',
   # bench functions
-  './src/bench/vector_vector_ops_bench.c',
+  'src/bench/vector_vector_ops_bench.c',
   # utils
-  './src/utils/time_utils.c',
-  './src/utils/allocate_utils.c',
+  'src/utils/time_utils.c',
+  'src/utils/allocate_utils.c',
+  'src/utils/matrix_utils.c'
 ]
 
 executable_sources = core_sources + [
-  './src/main.c'
+  'src/main.c'
 ]
 
 # creating test executables
 
 vector_vector_operations_test = executable(
   'vector_vector_ops_test',
-  sources: core_sources + ['./test/vector_vector_ops_test.c'],
+  sources: core_sources + ['test/vector_vector_ops_test.c'],
   include_directories: incdir,
   link_args: link_args
 )
 
 vector_matrix_operations_test = executable(
   'vector_matrix_ops_test',
-  sources: core_sources + ['./test/vector_matrix_ops_test.c'],
+  sources: core_sources + ['test/vector_matrix_ops_test.c'],
   include_directories: incdir,
   link_args: link_args
 )

@@ -1,3 +1,4 @@
+#include <matrix_utils.h>
 #include <stdlib.h>
 #include <vector_matrix_ops.h>
 #include <vector_vector_ops.h>
@@ -16,6 +17,9 @@
  */
 double *simplified_gemv_row(double **a, double *x, double *y, ll m, ll n)
 {
+    if (n <= 0 || m <= 0)
+        return NULL;
+
     double *out = malloc(sizeof(double) * m);
 
     for (int i = 0; i < m; i++) {
@@ -35,5 +39,24 @@ double *simplified_gemv_row(double **a, double *x, double *y, ll m, ll n)
  * @param y: The vector y of shape m
  * @param n: The length n
  * @param m: The length m
+ * @returns: A vector of length m
  */
-double *simplified_gemv_col(double **a, double *x, double *y, ll m, ll n);
+double *simplified_gemv_col(double **a, double *x, double *y, ll m, ll n)
+{
+    if (n <= 0 || m <= 0)
+        return NULL;
+
+    double *out = malloc(sizeof(double) * m);
+
+    for (ll i = 0; i < m; i++) {
+        out[i] = 0.0;
+    }
+
+    for (ll i = 0; i < n; i++) {
+        out = axpy(x[i], get_col(a, m, i), out, m);
+    }
+
+    out = axpy_no_alpha(out, y, m);
+
+    return out;
+}
