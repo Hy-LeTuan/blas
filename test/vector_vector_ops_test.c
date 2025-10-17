@@ -4,21 +4,23 @@
 #include <vector_vector_ops.h>
 #include <vector_vector_ops_test.h>
 
-void scal_test(ll n) {
+void scal_test(ll n)
+{
     double *x = vec_double_init_rand(n);
     double scalar = 3.0;
-    double *out = scal(x, scalar, n);
+    double *out = dscal(x, scalar, n);
 
     for (ll i = 0; i < n; i++) {
         assert(out[i] == x[i] * scalar);
     }
 }
 
-void axpy_no_alpha_test(ll n) {
+void axpy_no_alpha_test(ll n)
+{
     double *x = vec_double_init_rand(n);
     double *y = vec_double_init_rand(n);
 
-    double *out = axpy_no_alpha(x, y, n);
+    double *out = daxpy_no_alpha(x, y, n);
 
     for (ll i = 0; i < n; i++) {
         assert(out[i] == x[i] + y[i]);
@@ -29,24 +31,26 @@ void axpy_no_alpha_test(ll n) {
  * The testing function for the axpy operation. This test should only be called
  * after scal_test and axpy_no_alpha_test has passed.
  */
-void axpy_test(ll n) {
+void axpy_test(ll n)
+{
     double a = 3.0f;
 
     double *x = vec_double_init_rand(n);
     double *y = vec_double_init_rand(n);
 
-    double *out = axpy(a, x, y, n);
+    double *out = daxpy(a, x, y, n);
 
-    double *test_out = axpy_no_alpha(scal(x, a, n), y, n);
+    double *test_out = daxpy_no_alpha(dscal(x, a, n), y, n);
 
     for (ll i = 0; i < n; i++) {
         assert(out[i] == test_out[i]);
     }
 }
 
-void copy_test(ll n) {
+void copy_test(ll n)
+{
     double *a = vec_double_init_rand(n);
-    double *b = copy(a, n);
+    double *b = dcopy(a, n);
 
     for (ll i = 0; i < n; i++) {
         assert(a[i] == b[i]);
@@ -58,14 +62,15 @@ void copy_test(ll n) {
  * after copy_test has passed, since it depends on the copy function to work
  * properly.
  */
-void swap_test(ll n) {
+void swap_test(ll n)
+{
     double *a = vec_double_init_rand(n);
     double *b = vec_double_init_rand(n);
 
-    double *old_a = copy(a, n);
-    double *old_b = copy(b, n);
+    double *old_a = dcopy(a, n);
+    double *old_b = dcopy(b, n);
 
-    swap(a, b, n);
+    dswap(a, b, n);
 
     for (int i = 0; i < n; i++) {
         assert(a[i] == old_b[i]);
@@ -73,9 +78,10 @@ void swap_test(ll n) {
     }
 }
 
-void assum_test(ll n) {
+void assum_test(ll n)
+{
     double *a = vec_double_init_rand(n);
-    double sum = assum(a, n);
+    double sum = dassum(a, n);
 
     double test_sum = a[0];
 
@@ -86,10 +92,11 @@ void assum_test(ll n) {
     assert(sum == test_sum);
 }
 
-void iamax_test(ll n) {
+void iamax_test(ll n)
+{
     double *a = vec_double_init_rand(n);
 
-    ll index = iamax(a, n);
+    ll index = diamax(a, n);
     ll max_index = 0;
 
     for (ll i = 0; i < n; i++) {
@@ -100,7 +107,8 @@ void iamax_test(ll n) {
     assert(index == max_index);
 }
 
-int main() {
+int main()
+{
     ll n = 2000000;
 
     scal_test(n);

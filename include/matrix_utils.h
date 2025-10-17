@@ -4,5 +4,6 @@
 #include <blas_types.h>
 
 double *get_col(double **a, ll m, ll col_index);
+void update_col(double **a, double *x, ll m, ll col_index);
 
 #endif

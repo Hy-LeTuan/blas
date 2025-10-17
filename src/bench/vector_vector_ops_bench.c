@@ -5,7 +5,8 @@
 #include <vector_vector_ops.h>
 #include <vector_vector_ops_bench.h>
 
-void axpy_bench(benchmark_info *info) {
+void axpy_bench(benchmark_info *info)
+{
     ll n = info->n;
 
     double a = 2.0f;
@@ -13,25 +14,27 @@ void axpy_bench(benchmark_info *info) {
     double *x = vec_double_init_linspace(n);
     double *y = vec_double_init_linspace(n);
 
-    double *res = axpy(a, x, y, n);
+    double *res = daxpy(a, x, y, n);
 
     for (ll i = 0; i < n; i++) {
         assert(res[i] == x[i] * y[i] + a);
     }
 }
 
-void dot_bench(benchmark_info *info) {
+void dot_bench(benchmark_info *info)
+{
     ll n = info->n;
 
     double *a = vec_double_init_linspace(n);
     double *b = vec_double_init_linspace(n);
 
-    double c = dot(a, b, n);
+    double c = ddot(a, b, n);
 
     assert(c != 0.0);
 }
 
-void swap_bench(benchmark_info *info) {
+void swap_bench(benchmark_info *info)
+{
     ll n = info->n;
 
     double *a = vec_double_init_linspace(n);
@@ -48,7 +51,7 @@ void swap_bench(benchmark_info *info) {
         old_b[i] = b[i];
     }
 
-    swap(a, b, n);
+    dswap(a, b, n);
 
     for (int i = 0; i < n; i++) {
         assert(a[i] == old_b[i]);
@@ -56,24 +59,26 @@ void swap_bench(benchmark_info *info) {
     }
 }
 
-void assum_bench(benchmark_info *info) {
+void assum_bench(benchmark_info *info)
+{
     ll n = info->n;
 
     double *a = vec_double_init_linspace(n);
 
-    double sum = iamax(a, n);
+    double sum = diamax(a, n);
 
     assert(sum != 0.0);
 
     return;
 }
 
-void iamax_bench(benchmark_info *info) {
+void iamax_bench(benchmark_info *info)
+{
     ll n = info->n;
 
     double *a = vec_double_init_linspace(n);
 
-    ll index = iamax(a, n);
+    ll index = diamax(a, n);
 
     assert(index == n - 1);
 }

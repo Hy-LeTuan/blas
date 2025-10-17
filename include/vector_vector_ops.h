@@ -3,14 +3,15 @@
 
 #include <blas_types.h>
 
-extern double *axpy_no_alpha(double *x, double *y, ll n);
-extern double *axpy(double a, double *x, double *y, ll n);
-extern double *copy(double *a, ll n);
-extern double dot(double *a, double *b, ll n);
-extern double nrm2(double *a, ll n);
-extern double *scal(double *x, double a, ll n);
-extern void swap(double *a, double *b, ll n);
-extern double assum(double *a, ll n);
-extern double iamax(double *a, ll n);
+extern double *daxpy_no_alpha(double *x, double *y, ll n);
+extern double *daxpy(double a, double *x, double *y, ll n);
+extern double *dcopy(double *a, ll n);
+extern double ddot(double *a, double *b, ll n);
+extern double dapdots(double alpha, double *x, double *y, ll n);
+extern double dnrm2(double *a, ll n);
+extern double *dscal(double *x, double a, ll n);
+extern void dswap(double *a, double *b, ll n);
+extern double dassum(double *a, ll n);
+extern double diamax(double *a, ll n);
 
 #endif
