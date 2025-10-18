@@ -21,8 +21,11 @@ typedef struct {
 } benchmark_info;
 
 typedef struct {
-    double time;
+    double warmup_time;
+    double run_time;
     ll flops;
+    ll array_length;
+    double *time_records;
 } benchmark_result;
 
 typedef void (*BENCHMARK_FUNC)(benchmark_info *info);

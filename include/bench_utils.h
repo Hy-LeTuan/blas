@@ -5,6 +5,6 @@
 
 double seconds();
 double time_function(benchmark_info *info, BENCHMARK_FUNC f);
-double calculate_flops(enum BLAS_FUNCTIONS);
+ll calculate_flops(ll n, enum BLAS_FUNCTIONS f);
 
 #endif

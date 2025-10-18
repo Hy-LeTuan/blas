@@ -7,6 +7,7 @@ extern volatile double sink;
 
 void run_function(benchmark_info *info);
 void bench(benchmark_info *info);
-void display_result(benchmark_result *res);
+void display_result(benchmark_info *info, benchmark_result *res);
+BENCHMARK_FUNC get_bench_function(enum BLAS_FUNCTIONS f);
 
 #endif
