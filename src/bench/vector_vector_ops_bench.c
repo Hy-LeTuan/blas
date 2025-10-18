@@ -1,5 +1,6 @@
 #include <allocate_utils.h>
 #include <assert.h>
+#include <bench.h>
 #include <blas_types.h>
 #include <stdlib.h>
 #include <vector_vector_ops.h>
@@ -11,34 +12,40 @@ void axpy_bench(benchmark_info *info)
 
     double a = 2.0f;
 
-    double *x = vec_double_init_linspace(n);
-    double *y = vec_double_init_linspace(n);
+    double *x = vec_double_init_rand(n);
+    double *y = vec_double_init_rand(n);
 
     double *res = daxpy(a, x, y, n, 1, 1, 0, 0);
 
-    for (ll i = 0; i < n; i++) {
-        assert(res[i] == x[i] * y[i] + a);
-    }
+    sink += res[0];
+
+    free(x);
+    free(y);
+    free(res);
 }
 
 void dot_bench(benchmark_info *info)
 {
     ll n = info->n;
 
-    double *a = vec_double_init_linspace(n);
-    double *b = vec_double_init_linspace(n);
+    double *a = vec_double_init_rand(n);
+    double *b = vec_double_init_rand(n);
 
     double c = ddot(a, b, n, 1, 1, 0, 0);
 
-    assert(c != 0.0);
+    sink += c;
+    sink = 0.0;
+
+    free(a);
+    free(b);
 }
 
 void swap_bench(benchmark_info *info)
 {
     ll n = info->n;
 
-    double *a = vec_double_init_linspace(n);
-    double *b = vec_double_init_linspace(n);
+    double *a = vec_double_init_rand(n);
+    double *b = vec_double_init_rand(n);
 
     double *old_a = malloc(sizeof(double) * n);
     double *old_b = malloc(sizeof(double) * n);
@@ -53,8 +60,49 @@ void swap_bench(benchmark_info *info)
 
     dswap(a, b, n, 1, 1, 0, 0);
 
-    for (int i = 0; i < n; i++) {
-        assert(a[i] == old_b[i]);
-        assert(b[i] == old_a[i]);
-    }
+    free(a);
+    free(b);
+    free(old_a);
+    free(old_b);
+}
+
+void copy_bench(benchmark_info *info)
+{
+    ll n = info->n;
+
+    double *a = vec_double_init_rand(n);
+    double *b = dcopy(a, n, 1, 0);
+
+    sink += b[0];
+    sink = 0.0;
+
+    free(a);
+    free(b);
+}
+
+void scal_bench(benchmark_info *info)
+{
+    ll n = info->n;
+
+    double *a = vec_double_init_rand(n);
+    double *b = dscal(a, 2.0, n, 1, 0);
+
+    sink += b[0];
+    sink = 0.0;
+
+    free(a);
+    free(b);
+}
+
+void nrm2_bench(benchmark_info *info)
+{
+    ll n = info->n;
+
+    double *a = vec_double_init_rand(n);
+    double l = dnrm2(a, n, 1, 0);
+
+    sink += l;
+    sink = 0.0;
+
+    free(a);
 }

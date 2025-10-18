@@ -3,7 +3,7 @@
 
 typedef long long ll;
 
-enum VALID_FUNCTIONS {
+enum BLAS_FUNCTIONS {
     AXPY,
     COPY,
     DOT,
@@ -13,13 +13,21 @@ enum VALID_FUNCTIONS {
     INVALID_FUNC,
 };
 
-enum VALID_FUNCTIONS convert(char *str);
-
 typedef struct {
     ll n;
-    enum VALID_FUNCTIONS f;
+    ll iteration;
+    ll cache_warmup;
+    enum BLAS_FUNCTIONS f;
 } benchmark_info;
 
+typedef struct {
+    double time;
+    ll flops;
+} benchmark_result;
+
 typedef void (*BENCHMARK_FUNC)(benchmark_info *info);
+
+enum BLAS_FUNCTIONS convert(char *str);
+char *display_enum(enum BLAS_FUNCTIONS f);
 
 #endif
