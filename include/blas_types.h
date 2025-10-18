@@ -10,8 +10,6 @@ enum VALID_FUNCTIONS {
     NRM2,
     SCAL,
     SWAP,
-    ASSUM,
-    IAMAX,
     INVALID_FUNC,
 };
 

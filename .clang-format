@@ -1,1 +1,12 @@
+BreakBeforeBraces: Stroustrup
+ColumnLimit: 88
+ContinuationIndentWidth: 8
+DerivePointerAlignment: false
+IncludeBlocks: Regroup
+IndentPPDirectives: AfterHash
+PointerAlignment: Right
+ReflowComments: true
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+TabWidth: 4
 IndentWidth: 4

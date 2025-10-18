@@ -2,36 +2,39 @@
 #include <assert.h>
 #include <blas_types.h>
 #include <stdlib.h>
-#include <vector_ops.h>
-#include <vector_ops_bench.h>
+#include <vector_vector_ops.h>
+#include <vector_vector_ops_bench.h>
 
-void axpy_bench(benchmark_info *info) {
+void axpy_bench(benchmark_info *info)
+{
     ll n = info->n;
 
-    double x = 2.0f;
-    double y = 3.0f;
+    double a = 2.0f;
 
-    double *a = vec_double_init_linspace(n);
+    double *x = vec_double_init_linspace(n);
+    double *y = vec_double_init_linspace(n);
 
-    double *res = axpy(a, x, y, n);
+    double *res = daxpy(a, x, y, n, 1, 1, 0, 0);
 
     for (ll i = 0; i < n; i++) {
-        assert(res[i] == a[i] * x + y);
+        assert(res[i] == x[i] * y[i] + a);
     }
 }
 
-void dot_bench(benchmark_info *info) {
+void dot_bench(benchmark_info *info)
+{
     ll n = info->n;
 
     double *a = vec_double_init_linspace(n);
     double *b = vec_double_init_linspace(n);
 
-    double c = dot(a, b, n);
+    double c = ddot(a, b, n, 1, 1, 0, 0);
 
     assert(c != 0.0);
 }
 
-void swap_bench(benchmark_info *info) {
+void swap_bench(benchmark_info *info)
+{
     ll n = info->n;
 
     double *a = vec_double_init_linspace(n);
@@ -48,32 +51,10 @@ void swap_bench(benchmark_info *info) {
         old_b[i] = b[i];
     }
 
-    swap(a, b, n);
+    dswap(a, b, n, 1, 1, 0, 0);
 
     for (int i = 0; i < n; i++) {
         assert(a[i] == old_b[i]);
         assert(b[i] == old_a[i]);
     }
-}
-
-void assum_bench(benchmark_info *info) {
-    ll n = info->n;
-
-    double *a = vec_double_init_linspace(n);
-
-    double sum = iamax(a, n);
-
-    assert(sum != 0.0);
-
-    return;
-}
-
-void iamax_bench(benchmark_info *info) {
-    ll n = info->n;
-
-    double *a = vec_double_init_linspace(n);
-
-    ll index = iamax(a, n);
-
-    assert(index == n - 1);
 }
