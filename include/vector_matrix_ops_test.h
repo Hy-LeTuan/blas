@@ -6,7 +6,13 @@
 void simplified_gemv_row_test(ll m, ll n);
 void simplified_gemv_col_test(ll m, ll n);
 
-void simplified_ger_row_test(ll m, ll n);
-void simplified_ger_col_test(ll m, ll n);
+void simplified_gemv_col_flat_test(ll m, ll n);
+void simplified_gemv_row_flat_test(ll m, ll n);
+
+void simplified_dger_row_test(ll m, ll n);
+void simplified_dger_col_test(ll m, ll n);
+
+void simplified_dger_row_flat_test(ll m, ll n);
+void simplified_dger_col_flat_test(ll m, ll n);
 
 #endif

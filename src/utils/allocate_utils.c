@@ -44,3 +44,16 @@ double **mat_double_init_rand(ll m, ll n)
 
     return a;
 }
+
+double *mat_double_init_linspace_flat(ll m, ll n)
+{
+    double *out = malloc(sizeof(double) * m * n);
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            out[i * n + j] = j;
+        }
+    }
+
+    return out;
+}

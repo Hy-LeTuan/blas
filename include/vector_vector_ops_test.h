@@ -8,7 +8,6 @@ void scal_test(ll n);
 void axpy_test(ll n);
 void copy_test(ll n);
 void swap_test(ll n);
-void assum_test(ll n);
-void iamax_test(ll n);
+void dot_test(ll n);
 
 #endif

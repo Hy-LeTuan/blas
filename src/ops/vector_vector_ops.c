@@ -10,15 +10,24 @@
  * @param n: The length n
  * @returns: Returns a pointer to a vector fo size n
  */
-double *daxpy_no_alpha(double *x, double *y, ll n)
+double *daxpy_no_alpha(double *x, double *y, ll n, ll stride_x, ll stride_y, ll start_x,
+                       ll start_y)
 {
     if (n <= 0)
         return NULL;
 
     double *out = malloc(sizeof(x[0]) * n);
 
-    for (ll i = 0; i < n; i++) {
-        out[i] = x[i] + y[i];
+    ll ix = start_x;
+    ll iy = start_y;
+    ll i = 0;
+
+    while (i < n) {
+        out[i] = x[ix] + y[iy];
+
+        i++;
+        ix += stride_x;
+        iy += stride_y;
     }
 
     return out;
@@ -34,119 +43,114 @@ double *daxpy_no_alpha(double *x, double *y, ll n)
  * @returns: Returns a pointer to a vector fo size n
  * @flops: 2n
  */
-double *daxpy(double a, double *x, double *y, ll n)
+double *daxpy(double a, double *x, double *y, ll n, ll stride_x, ll stride_y,
+              ll start_x, ll start_y)
 {
     if (n <= 0)
         return NULL;
 
     double *out = malloc(sizeof(x[0]) * n);
 
-    for (ll i = 0; i < n; i++) {
-        out[i] = a * x[i] + y[i];
+    ll ix = start_x;
+    ll iy = start_y;
+    ll i = 0;
+
+    while (i < n) {
+        out[i] = a * x[ix] + y[iy];
+
+        i++;
+        ix += stride_x;
+        iy += stride_y;
     }
 
     return out;
 }
 
-double *dcopy(double *a, ll n)
+double *dcopy(double *x, ll n, ll stride, ll start)
 {
     if (n <= 0)
         return NULL;
 
-    double *out = malloc(sizeof(a[0]) * n);
+    double *out = malloc(sizeof(double) * n);
 
-    for (ll i = 0; i < n; i++) {
-        out[i] = a[i];
+    for (ll i = start; i < start + n * stride; i += stride) {
+        out[i] = x[i];
     }
 
     return out;
 };
 
-double ddot(double *x, double *y, ll n)
+/*
+ * The dot product between 2 vecotrs x and y with the length n
+ */
+double ddot(double *x, double *y, ll n, ll stride_x, ll stride_y, ll start_x,
+            ll start_y)
 {
     if (n <= 0)
         return 0.0f;
 
-    double out = x[0] * y[0];
+    double out = x[start_x] * y[start_y];
+
+    ll ix = start_x + stride_x;
+    ll iy = start_y + stride_y;
 
     for (ll i = 1; i < n; i++) {
-        out += (x[i] * y[i]);
+        out += (x[ix] * y[iy]);
+
+        ix += stride_x;
+        iy += stride_y;
     }
 
     return out;
 }
 
-double dapdots(double alpha, double *x, double *y, ll n)
+double dapdots(double alpha, double *x, double *y, ll n, ll stride_x, ll stride_y,
+               ll start_x, ll start_y)
 {
-    return alpha + ddot(x, y, n);
+    return alpha + ddot(x, y, n, stride_x, stride_y, start_x, start_y);
 }
 
-double dnrm2(double *x, ll n)
+/*
+ * Get the L2 norm of a vctor
+ */
+double dnrm2(double *x, ll n, ll stride, ll start)
 {
     if (n <= 0)
         return 0.0f;
 
-    return sqrt(ddot(x, x, n));
+    return sqrt(ddot(x, x, n, stride, stride, start, start));
 }
 
-double *dscal(double *x, double a, ll n)
+double *dscal(double *x, double a, ll n, ll stride, ll start)
 {
     if (n <= 0)
         return NULL;
 
-    double *out = malloc(sizeof(x[0]) * n);
+    double *out = malloc(sizeof(double) * n);
 
-    for (ll i = 0; i < n; i++) {
+    for (ll i = start; i < start + stride * n; i += stride) {
         out[i] = x[i] * a;
     }
 
     return out;
 }
 
-void dswap(double *a, double *b, ll n)
+void dswap(double *x, double *y, ll n, ll stride_x, ll stride_y, ll start_x, ll start_y)
 {
     if (n <= 0)
         return;
 
     double temp;
 
+    ll ix = start_x;
+    ll iy = start_y;
+
     for (ll i = 0; i < n; i++) {
-        temp = a[i];
-        a[i] = b[i];
-        b[i] = temp;
+        temp = x[ix];
+        x[ix] = y[iy];
+        y[iy] = temp;
+
+        ix += stride_x;
+        iy += stride_y;
     }
-}
-
-double dassum(double *a, ll n)
-{
-    if (n <= 0)
-        return 0.0f;
-
-    double sum = a[0];
-
-    for (int i = 1; i < n; i++) {
-        sum += fabs(a[i]);
-    }
-
-    return sum;
-}
-
-/*
- * Find the index of the maximal element of the vector. If there are multiple
- * maximal elements, return the index of the first occurence.
- */
-double diamax(double *a, ll n)
-{
-    if (n <= 0)
-        return -1.0f;
-
-    ll index = 0;
-
-    for (ll i = 1; i < n; i++) {
-        if (a[i] > a[index]) {
-            index = i;
-        }
-    }
-
-    return index;
 }

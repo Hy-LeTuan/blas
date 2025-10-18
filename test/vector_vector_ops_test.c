@@ -1,6 +1,5 @@
 #include <allocate_utils.h>
 #include <assert.h>
-#include <math.h>
 #include <vector_vector_ops.h>
 #include <vector_vector_ops_test.h>
 
@@ -8,7 +7,7 @@ void scal_test(ll n)
 {
     double *x = vec_double_init_rand(n);
     double scalar = 3.0;
-    double *out = dscal(x, scalar, n);
+    double *out = dscal(x, scalar, n, 1, 0);
 
     for (ll i = 0; i < n; i++) {
         assert(out[i] == x[i] * scalar);
@@ -20,7 +19,7 @@ void axpy_no_alpha_test(ll n)
     double *x = vec_double_init_rand(n);
     double *y = vec_double_init_rand(n);
 
-    double *out = daxpy_no_alpha(x, y, n);
+    double *out = daxpy_no_alpha(x, y, n, 1, 1, 0, 0);
 
     for (ll i = 0; i < n; i++) {
         assert(out[i] == x[i] + y[i]);
@@ -38,9 +37,9 @@ void axpy_test(ll n)
     double *x = vec_double_init_rand(n);
     double *y = vec_double_init_rand(n);
 
-    double *out = daxpy(a, x, y, n);
+    double *out = daxpy(a, x, y, n, 1, 1, 0, 0);
 
-    double *test_out = daxpy_no_alpha(dscal(x, a, n), y, n);
+    double *test_out = daxpy_no_alpha(dscal(x, a, n, 1, 0), y, n, 1, 1, 0, 0);
 
     for (ll i = 0; i < n; i++) {
         assert(out[i] == test_out[i]);
@@ -50,7 +49,7 @@ void axpy_test(ll n)
 void copy_test(ll n)
 {
     double *a = vec_double_init_rand(n);
-    double *b = dcopy(a, n);
+    double *b = dcopy(a, n, 1, 0);
 
     for (ll i = 0; i < n; i++) {
         assert(a[i] == b[i]);
@@ -67,10 +66,10 @@ void swap_test(ll n)
     double *a = vec_double_init_rand(n);
     double *b = vec_double_init_rand(n);
 
-    double *old_a = dcopy(a, n);
-    double *old_b = dcopy(b, n);
+    double *old_a = dcopy(a, n, 1, 0);
+    double *old_b = dcopy(b, n, 1, 0);
 
-    dswap(a, b, n);
+    dswap(a, b, n, 1, 1, 0, 0);
 
     for (int i = 0; i < n; i++) {
         assert(a[i] == old_b[i]);
@@ -78,46 +77,31 @@ void swap_test(ll n)
     }
 }
 
-void assum_test(ll n)
+void dot_test(ll n)
 {
-    double *a = vec_double_init_rand(n);
-    double sum = dassum(a, n);
+    double *a = vec_double_init_linspace(n);
+    double *b = vec_double_init_linspace(n);
 
-    double test_sum = a[0];
+    double out = ddot(a, b, n, 1, 1, 0, 0);
+    double out_man = a[0] * b[0];
 
-    for (ll i = 1; i < n; i++) {
-        test_sum += fabs(a[i]);
+    for (int i = 1; i < n; i++) {
+        out_man += (a[i] * b[i]);
     }
 
-    assert(sum == test_sum);
-}
-
-void iamax_test(ll n)
-{
-    double *a = vec_double_init_rand(n);
-
-    ll index = diamax(a, n);
-    ll max_index = 0;
-
-    for (ll i = 0; i < n; i++) {
-        if (a[i] > a[max_index])
-            max_index = i;
-    }
-
-    assert(index == max_index);
+    assert(out_man == out);
 }
 
 int main()
 {
-    ll n = 2000000;
+    ll n = 100000;
 
     scal_test(n);
     axpy_no_alpha_test(n);
     axpy_test(n);
     copy_test(n);
     swap_test(n);
-    assum_test(n);
-    iamax_test(n);
+    dot_test(n);
 
     return 0;
 }

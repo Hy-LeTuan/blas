@@ -14,7 +14,7 @@ void axpy_bench(benchmark_info *info)
     double *x = vec_double_init_linspace(n);
     double *y = vec_double_init_linspace(n);
 
-    double *res = daxpy(a, x, y, n);
+    double *res = daxpy(a, x, y, n, 1, 1, 0, 0);
 
     for (ll i = 0; i < n; i++) {
         assert(res[i] == x[i] * y[i] + a);
@@ -28,7 +28,7 @@ void dot_bench(benchmark_info *info)
     double *a = vec_double_init_linspace(n);
     double *b = vec_double_init_linspace(n);
 
-    double c = ddot(a, b, n);
+    double c = ddot(a, b, n, 1, 1, 0, 0);
 
     assert(c != 0.0);
 }
@@ -51,34 +51,10 @@ void swap_bench(benchmark_info *info)
         old_b[i] = b[i];
     }
 
-    dswap(a, b, n);
+    dswap(a, b, n, 1, 1, 0, 0);
 
     for (int i = 0; i < n; i++) {
         assert(a[i] == old_b[i]);
         assert(b[i] == old_a[i]);
     }
-}
-
-void assum_bench(benchmark_info *info)
-{
-    ll n = info->n;
-
-    double *a = vec_double_init_linspace(n);
-
-    double sum = diamax(a, n);
-
-    assert(sum != 0.0);
-
-    return;
-}
-
-void iamax_bench(benchmark_info *info)
-{
-    ll n = info->n;
-
-    double *a = vec_double_init_linspace(n);
-
-    ll index = diamax(a, n);
-
-    assert(index == n - 1);
 }

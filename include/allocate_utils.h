@@ -9,4 +9,6 @@ double *vec_double_init_rand(ll n);
 double **mat_double_init_linspace(ll m, ll n);
 double **mat_double_init_rand(ll m, ll n);
 
+double *mat_double_init_linspace_flat(ll m, ll n);
+
 #endif
