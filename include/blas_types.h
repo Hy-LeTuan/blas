@@ -3,7 +3,10 @@
 
 typedef long long ll;
 
-enum VALID_FUNCTIONS {
+#define AVERAGE_UNIT "(s/iter)"
+#define TIME_UNIT "(s)"
+
+enum BLAS_FUNCTIONS {
     AXPY,
     COPY,
     DOT,
@@ -13,13 +16,24 @@ enum VALID_FUNCTIONS {
     INVALID_FUNC,
 };
 
-enum VALID_FUNCTIONS convert(char *str);
-
 typedef struct {
     ll n;
-    enum VALID_FUNCTIONS f;
+    ll iteration;
+    ll cache_warmup;
+    enum BLAS_FUNCTIONS f;
 } benchmark_info;
 
+typedef struct {
+    double warmup_time;
+    double run_time;
+    ll flops;
+    ll array_length;
+    double *time_records;
+} benchmark_result;
+
 typedef void (*BENCHMARK_FUNC)(benchmark_info *info);
+
+enum BLAS_FUNCTIONS convert(char *str);
+char *convert_blas_func_to_str(enum BLAS_FUNCTIONS f);
 
 #endif

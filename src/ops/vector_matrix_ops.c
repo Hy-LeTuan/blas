@@ -16,35 +16,31 @@ double **copy_mat(double **a, ll m, ll n)
     return out;
 }
 
-double *simplified_dgemv_col_flat(double *a, double *x, double *y, ll m, ll n)
+/*
+ * The simplified version of the General Matrix Vector Multiplication (GEMV)
+ * "aAx
+ * + By" where a and B = 1. The multiplication is carried out as a linear
+ * combination of the columns of A and x. with x.
+ * @param a: The matrix A of shape (m x n)
+ * @param x: The vector x of shape (n)
+ * @param y: The vector y of shape m
+ * @param n: The length n
+ * @param m: The length m
+ * @returns: A vector of length m
+ */
+double *simplified_dgemv_col(double *a, double *x, double *y, ll m, ll n)
 {
     if (n <= 0 || m <= 0)
         return NULL;
 
     double *out = malloc(sizeof(double) * m);
-    for (ll i = 0; i < m; i++) {
-        out[i] = 0.0;
-    }
+    memset(out, 0.0, sizeof(double) * m);
 
     for (ll j = 0; j < n; j++) {
         out = daxpy(x[j], a, out, m, n, 1, j, 0);
     }
 
     out = daxpy_no_alpha(out, y, m, 1, 1, 0, 0);
-
-    return out;
-}
-
-double *simplified_dgemv_row_flat(double *a, double *x, double *y, ll m, ll n)
-{
-    if (n <= 0 || m <= 0)
-        return NULL;
-
-    double *out = malloc(sizeof(double) * m);
-
-    for (ll i = 0; i < m; i++) {
-        out[i] = ddot(a, x, n, 1, 1, i * n, 0) + y[i];
-    }
 
     return out;
 }
@@ -61,33 +57,7 @@ double *simplified_dgemv_row_flat(double *a, double *x, double *y, ll m, ll n)
  * @param m: The length m
  * @returns: A vector of length m
  */
-double *simplified_dgemv_row(double **a, double *x, double *y, ll m, ll n)
-{
-    if (n <= 0 || m <= 0)
-        return NULL;
-
-    double *out = malloc(sizeof(double) * m);
-
-    for (int i = 0; i < m; i++) {
-        out[i] = ddot(a[i], x, n, 1, 1, 0, 0) + y[i];
-    }
-
-    return out;
-}
-
-/*
- * The simplified version of the General Matrix Vector Multiplication (GEMV)
- * "aAx
- * + By" where a and B = 1. The multiplication is carried out as a linear
- * combination of the columns of A and x. with x.
- * @param a: The matrix A of shape (m x n)
- * @param x: The vector x of shape (n)
- * @param y: The vector y of shape m
- * @param n: The length n
- * @param m: The length m
- * @returns: A vector of length m
- */
-double *simplified_dgemv_col(double **a, double *x, double *y, ll m, ll n)
+double *simplified_dgemv_row(double *a, double *x, double *y, ll m, ll n)
 {
     if (n <= 0 || m <= 0)
         return NULL;
@@ -95,14 +65,8 @@ double *simplified_dgemv_col(double **a, double *x, double *y, ll m, ll n)
     double *out = malloc(sizeof(double) * m);
 
     for (ll i = 0; i < m; i++) {
-        out[i] = 0.0;
+        out[i] = ddot(a, x, n, 1, 1, i * n, 0) + y[i];
     }
-
-    for (ll i = 0; i < n; i++) {
-        out = daxpy(x[i], get_col(a, m, i), out, m, 1, 1, 0, 0);
-    }
-
-    out = daxpy_no_alpha(out, y, m, 1, 1, 0, 0);
 
     return out;
 }
@@ -118,10 +82,11 @@ double *simplified_dgemv_col(double **a, double *x, double *y, ll m, ll n)
  * @param n: The length n
  * @flops: 2mn
  */
-void simplified_dger_row(double **a, double *x, double *y, ll m, ll n)
+void simplified_dger_row(double *a, double *x, double *y, ll m, ll n)
 {
     for (ll i = 0; i < m; i++) {
-        a[i] = daxpy(y[i], x, a[i], n, 1, 1, 0, 0);
+        double *row = daxpy(y[i], a, x, n, 1, 1, i * n, 0);
+        memcpy(a + i * n, row, sizeof(double) * n);
     }
 }
 
@@ -136,22 +101,7 @@ void simplified_dger_row(double **a, double *x, double *y, ll m, ll n)
  * @param n: The length n
  * @flops: 2nm
  */
-void simplified_dger_col(double **a, double *x, double *y, ll m, ll n)
-{
-    for (ll i = 0; i < n; i++) {
-        update_col(a, daxpy(x[i], y, get_col(a, m, i), m, 1, 1, 0, 0), m, i);
-    }
-}
-
-void simplified_dger_row_flat(double *a, double *x, double *y, ll m, ll n)
-{
-    for (ll i = 0; i < m; i++) {
-        double *row = daxpy(y[i], a, x, n, 1, 1, i * n, 0);
-        memcpy(a + i * n, row, sizeof(double) * n);
-    }
-}
-
-void simplified_dger_col_flat(double *a, double *x, double *y, ll m, ll n)
+void simplified_dger_col(double *a, double *x, double *y, ll m, ll n)
 {
     for (ll j = 0; j < n; j++) {
         double *col = daxpy(x[j], y, a, m, 1, n, 0, j);
@@ -161,5 +111,50 @@ void simplified_dger_col_flat(double *a, double *x, double *y, ll m, ll n)
         }
 
         printf("\n");
+    }
+}
+
+double *simplified_dgemv_row_array(double **a, double *x, double *y, ll m, ll n)
+{
+    if (n <= 0 || m <= 0)
+        return NULL;
+
+    double *out = malloc(sizeof(double) * m);
+
+    for (int i = 0; i < m; i++) {
+        out[i] = ddot(a[i], x, n, 1, 1, 0, 0) + y[i];
+    }
+
+    return out;
+}
+
+double *simplified_dgemv_col_array(double **a, double *x, double *y, ll m, ll n)
+{
+    if (n <= 0 || m <= 0)
+        return NULL;
+
+    double *out = malloc(sizeof(double) * m);
+    memset(out, 0.0, sizeof(double) * m);
+
+    for (ll i = 0; i < n; i++) {
+        out = daxpy(x[i], get_col(a, m, i), out, m, 1, 1, 0, 0);
+    }
+
+    out = daxpy_no_alpha(out, y, m, 1, 1, 0, 0);
+
+    return out;
+}
+
+void simplified_dger_row_array(double **a, double *x, double *y, ll m, ll n)
+{
+    for (ll i = 0; i < m; i++) {
+        a[i] = daxpy(y[i], x, a[i], n, 1, 1, 0, 0);
+    }
+}
+
+void simplified_dger_col_array(double **a, double *x, double *y, ll m, ll n)
+{
+    for (ll i = 0; i < n; i++) {
+        update_col(a, daxpy(x[i], y, get_col(a, m, i), m, 1, 1, 0, 0), m, i);
     }
 }

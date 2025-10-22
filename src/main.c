@@ -19,6 +19,12 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
     case 'f':
         info_ref->f = convert(arg);
         break;
+    case 'i':
+        info_ref->iteration = atoll(arg);
+        break;
+    case 'w':
+        info_ref->cache_warmup = atoll(arg);
+        break;
     case ARGP_KEY_ARG:
         info_ref->f = convert(arg);
         break;
@@ -33,15 +39,20 @@ int main(int argc, char *argv[])
 {
     srand(time(NULL));
 
-    benchmark_info info = {.n = 10000, .f = INVALID_FUNC};
+    benchmark_info info = {
+            .n = 10000, .f = INVALID_FUNC, .iteration = 1000, .cache_warmup = 100};
 
     struct argp_option options[] = {
             {"number", 'n', "NUM", OPTION_ARG_OPTIONAL,
              "The input size to allocate for testing."},
+            {"iteration", 'i', "NUM", OPTION_ARG_OPTIONAL,
+             "The number of iterations to run the provided function"},
+            {"warmup", 'w', "NUM", OPTION_ARG_OPTIONAL,
+             "The number of iterations for cache warmup."},
             {"size", 's', "NUM", OPTION_ALIAS, ""},
             {"function", 'f', "STRING", 0,
              "The name of the testing function. Available functions include: "
-             "axpy, copy, scal"},
+             "axpy, dot, copy, scal, swap, nrm2"},
             {0}};
 
     struct argp argp = {options, parse_opt, "FUNCTION"};

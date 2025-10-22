@@ -1,7 +1,7 @@
 #include <blas_types.h>
 #include <string.h>
 
-enum VALID_FUNCTIONS convert(char *str)
+enum BLAS_FUNCTIONS convert(char *str)
 {
     if (strcmp(str, "axpy") == 0 || strcmp(str, "Axpy") == 0 ||
         strcmp(str, "AXPY") == 0) {
@@ -30,4 +30,26 @@ enum VALID_FUNCTIONS convert(char *str)
     else {
         return INVALID_FUNC;
     }
+}
+
+char *convert_blas_func_to_str(enum BLAS_FUNCTIONS f)
+{
+    switch (f) {
+    case AXPY:
+        return "AXPY";
+    case COPY:
+        return "COPY";
+    case DOT:
+        return "DOT";
+    case NRM2:
+        return "NRM2";
+    case SCAL:
+        return "SCAL";
+    case SWAP:
+        return "SWAP";
+    case INVALID_FUNC:
+        return "INVALID FUNCTION";
+    }
+
+    return "INVALID FUNCTION";
 }

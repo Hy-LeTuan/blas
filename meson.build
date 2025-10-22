@@ -18,7 +18,7 @@ core_sources = [
   # bench functions
   'src/bench/vector_vector_ops_bench.c',
   # utils
-  'src/utils/time_utils.c',
+  'src/utils/bench_utils.c',
   'src/utils/allocate_utils.c',
   'src/utils/matrix_utils.c'
 ]

@@ -66,6 +66,15 @@ double *daxpy(double a, double *x, double *y, ll n, ll stride_x, ll stride_y,
     return out;
 }
 
+/*
+ * Performs the copy of vector x to another separate buffer through malloc. Returns the
+ * new vector. If x is access with a stride > 1, the copied vector would also be
+ * strided, but every elements between strides are uninitialized.
+ * @param x: The vector x
+ * @param n: The length n
+ * @param stride: The stride for x
+ * @param start: The index of the starting element
+ */
 double *dcopy(double *x, ll n, ll stride, ll start)
 {
     if (n <= 0)
@@ -81,7 +90,8 @@ double *dcopy(double *x, ll n, ll stride, ll start)
 };
 
 /*
- * The dot product between 2 vecotrs x and y with the length n
+ * Performs the dot product between 2 vecotrs x and y with the length n
+ * @flops: 2n - 1
  */
 double ddot(double *x, double *y, ll n, ll stride_x, ll stride_y, ll start_x,
             ll start_y)
@@ -111,7 +121,8 @@ double dapdots(double alpha, double *x, double *y, ll n, ll stride_x, ll stride_
 }
 
 /*
- * Get the L2 norm of a vctor
+ * Compute the L2 norm of a vctor
+ * @flops: 2n - 1
  */
 double dnrm2(double *x, ll n, ll stride, ll start)
 {
@@ -121,6 +132,9 @@ double dnrm2(double *x, ll n, ll stride, ll start)
     return sqrt(ddot(x, x, n, stride, stride, start, start));
 }
 
+/*
+ * Performs the scaling of a vector x with a factor a
+ */
 double *dscal(double *x, double a, ll n, ll stride, ll start)
 {
     if (n <= 0)
