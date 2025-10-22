@@ -71,12 +71,48 @@ BENCHMARK_FUNC get_bench_function(enum BLAS_FUNCTIONS f)
 
 void display_result(benchmark_info *info, benchmark_result *res)
 {
+    double total_warmup_time = 0.0;
+    double total_execution_time = 0.0;
+
     for (ll i = 0; i < info->cache_warmup; i++) {
-        printf("time for warmup iteration %lld is %f\n", i, res->time_records[i]);
+        total_warmup_time += res->time_records[i];
     }
 
     for (ll i = info->cache_warmup; i < info->iteration; i++) {
-        printf("time for iteration %lld is %f\n", i - info->cache_warmup,
-               res->time_records[i]);
+        total_execution_time += res->time_records[i];
     }
+
+    printf("-------------------------------------------------------\n");
+
+    printf("Running benchmark for function: %s\n", convert_blas_func_to_str(info->f));
+
+    printf("-------------------------------------------------------\n");
+
+    printf("I. Benchmark Metadata:\n");
+    printf("\t1. Function name: %s\n", convert_blas_func_to_str(info->f));
+    printf("\t2. Input size: %lld\n", info->n);
+    printf("\t3. Number of cache warm-up iteration: %lld\n", info->cache_warmup);
+    printf("\t4. Number of benchmark iteration: %lld\n",
+           info->iteration - info->cache_warmup);
+    printf("\t5. Number of total iteration: %lld\n", info->iteration);
+
+    printf("-------------------------------------------------------\n");
+
+    printf("II. Total Runtime Summary:\n");
+    printf("\t1. Total cache warm-up runtime: %f " TIME_UNIT "\n", total_warmup_time);
+    printf("\t2. Total benchmark runtime: %f " TIME_UNIT "\n", total_execution_time);
+    printf("\t3. Total runtime: %f " TIME_UNIT "\n",
+           total_warmup_time + total_execution_time);
+
+    printf("-------------------------------------------------------\n");
+
+    printf("III. Average Runtime Summary:\n");
+    printf("\t1. Average warm-up runtime: %f " AVERAGE_UNIT "\n",
+           total_warmup_time / info->cache_warmup);
+    printf("\t2. Average benchmark runtime: %f " AVERAGE_UNIT "\n",
+           total_execution_time / (info->iteration - info->cache_warmup));
+    printf("\t3. Average total runtime: %f " AVERAGE_UNIT "\n",
+           (total_execution_time + total_warmup_time) / info->iteration);
+
+    printf("-------------------------------------------------------\n");
 }

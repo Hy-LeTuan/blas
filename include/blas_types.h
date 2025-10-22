@@ -3,6 +3,9 @@
 
 typedef long long ll;
 
+#define AVERAGE_UNIT "(s/iter)"
+#define TIME_UNIT "(s)"
+
 enum BLAS_FUNCTIONS {
     AXPY,
     COPY,
@@ -31,6 +34,6 @@ typedef struct {
 typedef void (*BENCHMARK_FUNC)(benchmark_info *info);
 
 enum BLAS_FUNCTIONS convert(char *str);
-char *display_enum(enum BLAS_FUNCTIONS f);
+char *convert_blas_func_to_str(enum BLAS_FUNCTIONS f);
 
 #endif

@@ -32,7 +32,7 @@ enum BLAS_FUNCTIONS convert(char *str)
     }
 }
 
-char *display_enum(enum BLAS_FUNCTIONS f)
+char *convert_blas_func_to_str(enum BLAS_FUNCTIONS f)
 {
     switch (f) {
     case AXPY:
