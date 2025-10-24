@@ -4,7 +4,7 @@
 #include "blas_types.h"
 
 double seconds();
-double time_function(benchmark_info *info, BENCHMARK_FUNC f);
-ll calculate_flops(ll n, enum BLAS_FUNCTIONS f);
+double time_function(benchmark_info *info, Benchmark_Func f);
+ll calculate_flops(benchmark_info *info, enum Blas_Functions f);
 
 #endif

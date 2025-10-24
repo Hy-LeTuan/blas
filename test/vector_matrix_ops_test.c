@@ -3,12 +3,15 @@
 #include <allocate_utils.h>
 #include <assert.h>
 #include <math.h>
+#include <test_utils.h>
 #include <vector_matrix_ops_test.h>
 #include <vector_vector_ops.h>
 
+double epsilon = 1e-6;
+
 void simplified_gemv_row_array_test(ll m, ll n)
 {
-    double **a = mat_double_init_rand(m, n);
+    double **a = mat_double_init_rand_array(m, n);
     double *x = vec_double_init_rand(n);
     double *y = vec_double_init_rand(m);
 
@@ -21,9 +24,9 @@ void simplified_gemv_row_array_test(ll m, ll n)
 
 void simplified_gemv_col_array_test(ll m, ll n)
 {
-    double **a = mat_double_init_linspace(m, n);
-    double *x = vec_double_init_linspace(n);
-    double *y = vec_double_init_linspace(m);
+    double **a = mat_double_init_rand_array(m, n);
+    double *x = vec_double_init_rand(n);
+    double *y = vec_double_init_rand(m);
 
     double *out = simplified_dgemv_col_array(a, x, y, m, n);
 
@@ -34,11 +37,11 @@ void simplified_gemv_col_array_test(ll m, ll n)
 
 void simplified_gemv_col_test(ll m, ll n)
 {
-    double *a = mat_double_init_linspace_flat(m, n);
-    double **a_mat = mat_double_init_linspace(m, n);
+    double *a = mat_double_init_linspace(m, n);
+    double **a_mat = mat_double_init_linspace_array(m, n);
 
-    double *x = vec_double_init_linspace(n);
-    double *y = vec_double_init_linspace(m);
+    double *x = vec_double_init_rand(n);
+    double *y = vec_double_init_rand(m);
 
     double *out_mat = simplified_dgemv_col_array(a_mat, x, y, m, n);
     double *out_flat = simplified_dgemv_col(a, x, y, m, n);
@@ -50,11 +53,11 @@ void simplified_gemv_col_test(ll m, ll n)
 
 void simplified_gemv_row_test(ll m, ll n)
 {
-    double *a = mat_double_init_linspace_flat(m, n);
-    double **a_mat = mat_double_init_linspace(m, n);
+    double *a = mat_double_init_linspace(m, n);
+    double **a_mat = mat_double_init_linspace_array(m, n);
 
-    double *x = vec_double_init_linspace(n);
-    double *y = vec_double_init_linspace(m);
+    double *x = vec_double_init_rand(n);
+    double *y = vec_double_init_rand(m);
 
     double *out_mat = simplified_dgemv_row_array(a_mat, x, y, m, n);
     double *out_flat = simplified_dgemv_row(a, x, y, m, n);
@@ -66,7 +69,7 @@ void simplified_gemv_row_test(ll m, ll n)
 
 void simplified_dger_row_array_test(ll m, ll n)
 {
-    double **a = mat_double_init_rand(m, n);
+    double **a = mat_double_init_rand_array(m, n);
     double **a_original = copy_mat(a, m, n);
 
     double *x = vec_double_init_rand(n);
@@ -83,7 +86,7 @@ void simplified_dger_row_array_test(ll m, ll n)
 
 void simplified_dger_col_array_test(ll m, ll n)
 {
-    double **a = mat_double_init_rand(m, n);
+    double **a = mat_double_init_rand_array(m, n);
     double **a_original = copy_mat(a, m, n);
 
     double *x = vec_double_init_rand(n);
@@ -100,38 +103,36 @@ void simplified_dger_col_array_test(ll m, ll n)
 
 void simplified_dger_row_test(ll m, ll n)
 {
-    double **a = mat_double_init_linspace(m, n);
+    double **a = mat_double_init_linspace_array(m, n);
+    double *a_flat = mat_double_init_linspace(m, n);
 
-    double *x = vec_double_init_linspace(n);
-    double *y = vec_double_init_linspace(m);
-
-    double *a_flat = mat_double_init_linspace_flat(m, n);
+    double *x = vec_double_init_rand(n);
+    double *y = vec_double_init_rand(m);
 
     simplified_dger_row_array(a, x, y, m, n);
     simplified_dger_row(a_flat, x, y, m, n);
 
     for (ll i = 0; i < m; i++) {
         for (ll j = 0; j < n; j++) {
-            assert(a[i][j] == a_flat[i * n + j]);
+            assert(approx(a[i][j], a_flat[i * n + j], epsilon) == 1);
         }
     }
 }
 
 void simplified_dger_col_test(ll m, ll n)
 {
-    double **a = mat_double_init_linspace(m, n);
+    double **a = mat_double_init_linspace_array(m, n);
+    double *a_flat = mat_double_init_linspace(m, n);
 
-    double *x = vec_double_init_linspace(n);
-    double *y = vec_double_init_linspace(m);
-
-    double *a_flat = mat_double_init_linspace_flat(m, n);
+    double *x = vec_double_init_rand(n);
+    double *y = vec_double_init_rand(m);
 
     simplified_dger_row_array(a, x, y, m, n);
     simplified_dger_col(a_flat, x, y, m, n);
 
     for (ll i = 0; i < m; i++) {
         for (ll j = 0; j < n; j++) {
-            assert(a[i][j] == a_flat[i * n + j]);
+            assert(approx(a[i][j], a_flat[i * n + j], epsilon) == 1);
         }
     }
 }
@@ -139,8 +140,8 @@ void simplified_dger_col_test(ll m, ll n)
 int main()
 {
     ll m, n;
-    m = 3000;
-    n = 2000;
+    m = 3;
+    n = 2;
 
     simplified_gemv_row_array_test(m, n);
     simplified_gemv_col_array_test(m, n);

@@ -17,10 +17,12 @@ core_sources = [
   'src/ops/vector_matrix_ops.c',
   # bench functions
   'src/bench/vector_vector_ops_bench.c',
+  'src/bench/vector_matrix_ops_bench.c',
   # utils
   'src/utils/bench_utils.c',
   'src/utils/allocate_utils.c',
-  'src/utils/matrix_utils.c'
+  'src/utils/matrix_utils.c',
+  'src/utils/test_utils.c'
 ]
 
 executable_sources = core_sources + [

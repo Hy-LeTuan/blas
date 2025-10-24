@@ -23,10 +23,11 @@ double **copy_mat(double **a, ll m, ll n)
  * combination of the columns of A and x. with x.
  * @param a: The matrix A of shape (m x n)
  * @param x: The vector x of shape (n)
- * @param y: The vector y of shape m
+ * @param y: The vector y of shape (m)
  * @param n: The length n
  * @param m: The length m
  * @returns: A vector of length m
+ * @flops: 2mn
  */
 double *simplified_dgemv_col(double *a, double *x, double *y, ll m, ll n)
 {
@@ -56,6 +57,7 @@ double *simplified_dgemv_col(double *a, double *x, double *y, ll m, ll n)
  * @param n: The length n
  * @param m: The length m
  * @returns: A vector of length m
+ * @flops: 2mn
  */
 double *simplified_dgemv_row(double *a, double *x, double *y, ll m, ll n)
 {
@@ -85,7 +87,7 @@ double *simplified_dgemv_row(double *a, double *x, double *y, ll m, ll n)
 void simplified_dger_row(double *a, double *x, double *y, ll m, ll n)
 {
     for (ll i = 0; i < m; i++) {
-        double *row = daxpy(y[i], a, x, n, 1, 1, i * n, 0);
+        double *row = daxpy(y[i], x, a, n, 1, 1, 0, i * n);
         memcpy(a + i * n, row, sizeof(double) * n);
     }
 }

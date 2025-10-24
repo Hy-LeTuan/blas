@@ -1,7 +1,7 @@
 #include <blas_types.h>
 #include <string.h>
 
-enum BLAS_FUNCTIONS convert(char *str)
+enum Blas_Functions convert(char *str)
 {
     if (strcmp(str, "axpy") == 0 || strcmp(str, "Axpy") == 0 ||
         strcmp(str, "AXPY") == 0) {
@@ -27,12 +27,28 @@ enum BLAS_FUNCTIONS convert(char *str)
              strcmp(str, "SWAP") == 0) {
         return SWAP;
     }
+    else if (strcmp(str, "sdgemv_c") == 0 || strcmp(str, "Sdgemv_c") == 0 ||
+             strcmp(str, "SDGEMV_C") == 0) {
+        return SDGEMV_C;
+    }
+    else if (strcmp(str, "sdgemv_r") == 0 || strcmp(str, "Sdgemv_r") == 0 ||
+             strcmp(str, "SDGEMV_R") == 0) {
+        return SDGEMV_R;
+    }
+    else if (strcmp(str, "sdger_c") == 0 || strcmp(str, "Sdger_c") == 0 ||
+             strcmp(str, "SDGER_C") == 0) {
+        return SDGER_C;
+    }
+    else if (strcmp(str, "sdger_r") == 0 || strcmp(str, "Sdger_r") == 0 ||
+             strcmp(str, "SDGER_R") == 0) {
+        return SDGER_R;
+    }
     else {
         return INVALID_FUNC;
     }
 }
 
-char *convert_blas_func_to_str(enum BLAS_FUNCTIONS f)
+char *convert_blas_func_to_str(enum Blas_Functions f)
 {
     switch (f) {
     case AXPY:
@@ -49,7 +65,40 @@ char *convert_blas_func_to_str(enum BLAS_FUNCTIONS f)
         return "SWAP";
     case INVALID_FUNC:
         return "INVALID FUNCTION";
+    case SDGEMV_C:
+        return "SDGEMV_C";
+        break;
+    case SDGEMV_R:
+        return "SDGEMV_R";
+        break;
+    case SDGER_C:
+        return "SDGER_C";
+        break;
+    case SDGER_R:
+        return "SDGER_R";
+        break;
+    default:
+        return "INVALID FUNCTION";
     }
+}
 
-    return "INVALID FUNCTION";
+enum Blas_Function_Level get_func_level(enum Blas_Functions f)
+{
+    switch (f) {
+    case AXPY:
+    case COPY:
+    case DOT:
+    case NRM2:
+    case SCAL:
+    case SWAP:
+        return VEC_VEC;
+    case SDGEMV_C:
+    case SDGEMV_R:
+    case SDGER_C:
+    case SDGER_R:
+        return VEC_MAT;
+    case INVALID_FUNC:
+    default:
+        return VEC_VEC;
+    }
 }

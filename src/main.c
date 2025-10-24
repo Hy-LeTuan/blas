@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
 {
     srand(time(NULL));
 
-    benchmark_info info = {.n = 100000,
-                           .m = 100000,
+    benchmark_info info = {.n = 1000,
+                           .m = 1000,
                            .f = INVALID_FUNC,
                            .iteration = 500,
                            .cache_warmup = 100};
@@ -60,7 +60,8 @@ int main(int argc, char *argv[])
              "The number of iterations for cache warmup."},
             {"function", 'f', "STRING", 0,
              "The name of the testing function. Available functions include: "
-             "axpy, dot, copy, scal, swap, nrm2"},
+             "Vector - Vector: axpy, dot, copy, scal, swap, nrm2 | Vector - Matrix: "
+             "sdgemv_c, sdgemv_r, sdger_c, sdger_r"},
             {0}};
 
     struct argp argp = {options, parse_opt, "FUNCTION"};

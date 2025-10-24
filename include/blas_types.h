@@ -6,14 +6,23 @@ typedef long long ll;
 #define AVERAGE_UNIT "(s/iter)"
 #define TIME_UNIT "(s)"
 
-enum BLAS_FUNCTIONS {
+enum Blas_Functions {
     AXPY,
     COPY,
     DOT,
     NRM2,
     SCAL,
     SWAP,
+    SDGEMV_C,
+    SDGEMV_R,
+    SDGER_C,
+    SDGER_R,
     INVALID_FUNC,
+};
+
+enum Blas_Function_Level {
+    VEC_VEC,
+    VEC_MAT,
 };
 
 typedef struct {
@@ -21,7 +30,7 @@ typedef struct {
     ll m;
     ll iteration;
     ll cache_warmup;
-    enum BLAS_FUNCTIONS f;
+    enum Blas_Functions f;
 } benchmark_info;
 
 typedef struct {
@@ -32,9 +41,10 @@ typedef struct {
     double *time_records;
 } benchmark_result;
 
-typedef void (*BENCHMARK_FUNC)(benchmark_info *info);
+typedef void (*Benchmark_Func)(benchmark_info *info);
 
-enum BLAS_FUNCTIONS convert(char *str);
-char *convert_blas_func_to_str(enum BLAS_FUNCTIONS f);
+enum Blas_Functions convert(char *str);
+char *convert_blas_func_to_str(enum Blas_Functions f);
+enum Blas_Function_Level get_func_level(enum Blas_Functions f);
 
 #endif
