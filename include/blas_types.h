@@ -18,6 +18,7 @@ enum BLAS_FUNCTIONS {
 
 typedef struct {
     ll n;
+    ll m;
     ll iteration;
     ll cache_warmup;
     enum BLAS_FUNCTIONS f;

@@ -16,6 +16,9 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
     case 's':;
         info_ref->n = atoll(arg);
         break;
+    case 'm':
+        info_ref->m = atoll(arg);
+        break;
     case 'f':
         info_ref->f = convert(arg);
         break;
@@ -39,17 +42,22 @@ int main(int argc, char *argv[])
 {
     srand(time(NULL));
 
-    benchmark_info info = {
-            .n = 10000, .f = INVALID_FUNC, .iteration = 1000, .cache_warmup = 100};
+    benchmark_info info = {.n = 100000,
+                           .m = 100000,
+                           .f = INVALID_FUNC,
+                           .iteration = 500,
+                           .cache_warmup = 100};
 
     struct argp_option options[] = {
-            {"number", 'n', "NUM", OPTION_ARG_OPTIONAL,
-             "The input size to allocate for testing."},
+            {"first", 'n', "NUM", OPTION_ARG_OPTIONAL,
+             "The input size `n` to allocate for vector of size (n)."},
+            {"size", 's', "NUM", OPTION_ALIAS, ""},
+            {"second", 'm', "NUM", OPTION_ARG_OPTIONAL,
+             "The additional input size `m` to allocate for matrix of size (m x n)."},
             {"iteration", 'i', "NUM", OPTION_ARG_OPTIONAL,
-             "The number of iterations to run the provided function"},
+             "The number of iterations to run the provided function."},
             {"warmup", 'w', "NUM", OPTION_ARG_OPTIONAL,
              "The number of iterations for cache warmup."},
-            {"size", 's', "NUM", OPTION_ALIAS, ""},
             {"function", 'f', "STRING", 0,
              "The name of the testing function. Available functions include: "
              "axpy, dot, copy, scal, swap, nrm2"},

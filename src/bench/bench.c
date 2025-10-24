@@ -3,14 +3,36 @@
 
 #include <bench.h>
 #include <bench_utils.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 volatile double sink = 0.0;
 
-void run_function(benchmark_info *info);
-void display_result(benchmark_info *info, benchmark_result *res);
-BENCHMARK_FUNC get_bench_function(enum BLAS_FUNCTIONS f);
+/*
+ * Getting the address of all benching functions
+ */
+BENCHMARK_FUNC get_bench_function(enum BLAS_FUNCTIONS f)
+{
+    switch (f) {
+    case AXPY:
+        return &axpy_bench;
+    case COPY:
+        return &copy_bench;
+    case DOT:
+        return &dot_bench;
+    case NRM2:
+        return &nrm2_bench;
+    case SCAL:
+        return &scal_bench;
+    case SWAP:
+        return &swap_bench;
+    case INVALID_FUNC:
+        return NULL;
+    }
+
+    return NULL;
+}
 
 /*
  * The main function to run the benchmark. From this function, other functions
@@ -45,28 +67,8 @@ void run_function(benchmark_info *info)
     }
 
     display_result(info, &res);
-}
 
-BENCHMARK_FUNC get_bench_function(enum BLAS_FUNCTIONS f)
-{
-    switch (f) {
-    case AXPY:
-        return &axpy_bench;
-    case COPY:
-        return &copy_bench;
-    case DOT:
-        return &dot_bench;
-    case NRM2:
-        return &nrm2_bench;
-    case SCAL:
-        return &scal_bench;
-    case SWAP:
-        return &swap_bench;
-    case INVALID_FUNC:
-        return NULL;
-    }
-
-    return NULL;
+    free(res.time_records);
 }
 
 void display_result(benchmark_info *info, benchmark_result *res)
@@ -81,6 +83,16 @@ void display_result(benchmark_info *info, benchmark_result *res)
     for (ll i = info->cache_warmup; i < info->iteration; i++) {
         total_execution_time += res->time_records[i];
     }
+
+    double mean_execution_time =
+            total_execution_time / (info->iteration - info->cache_warmup);
+
+    double runtime_deviation = 0.0;
+    for (ll i = info->cache_warmup; i < info->iteration; i++) {
+        runtime_deviation += pow((res->time_records[i] - mean_execution_time), 2.0);
+    }
+
+    runtime_deviation /= (info->iteration - info->cache_warmup);
 
     printf("-------------------------------------------------------\n");
 
@@ -110,9 +122,17 @@ void display_result(benchmark_info *info, benchmark_result *res)
     printf("\t1. Average warm-up runtime: %f " AVERAGE_UNIT "\n",
            total_warmup_time / info->cache_warmup);
     printf("\t2. Average benchmark runtime: %f " AVERAGE_UNIT "\n",
-           total_execution_time / (info->iteration - info->cache_warmup));
+           mean_execution_time);
     printf("\t3. Average total runtime: %f " AVERAGE_UNIT "\n",
            (total_execution_time + total_warmup_time) / info->iteration);
+
+    printf("IV. Statistical Summary\n");
+    printf("\t1. Total Runtime: %f" TIME_UNIT "\n", total_execution_time);
+    printf("\t2. Average Runtime: %f" AVERAGE_UNIT "\n", mean_execution_time);
+    printf("\t3. Standard Deviation: %f\n", runtime_deviation);
+    printf("\t4. Theoretical FLOPS: %lld\n", res->flops);
+    printf("\t5. FLOP/s: %f\n", (res->flops * (info->iteration - info->cache_warmup)) /
+                                        (double)total_execution_time);
 
     printf("-------------------------------------------------------\n");
 }
