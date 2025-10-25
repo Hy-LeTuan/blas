@@ -11,7 +11,7 @@ double seconds()
     return t.tv_sec + t.tv_nsec * 1e-9;
 }
 
-double time_function(benchmark_info *info, Benchmark_Func f)
+double time_function(BenchmarkInfo *info, Benchmark_Func f)
 {
     double start = seconds();
 
@@ -22,7 +22,7 @@ double time_function(benchmark_info *info, Benchmark_Func f)
     return stop - start;
 }
 
-ll calculate_flops(benchmark_info *info, enum Blas_Functions f)
+ll calculate_flops(BenchmarkInfo *info, enum Blas_Functions f)
 {
     ll n = info->n;
     ll m = info->m;
@@ -38,8 +38,6 @@ ll calculate_flops(benchmark_info *info, enum Blas_Functions f)
         return 2 * n - 1;
     case SCAL:
         return n;
-    case INVALID_FUNC:
-        return 0;
     case SDGEMV_C:
     case SDGEMV_R:
     case SDGER_C:

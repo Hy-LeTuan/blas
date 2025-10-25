@@ -5,7 +5,7 @@
 #include <vector_matrix_ops.h>
 #include <vector_matrix_ops_bench.h>
 
-void simplified_dgemv_col_bench(benchmark_info *info)
+void simplified_dgemv_col_bench(BenchmarkInfo *info)
 {
     ll m = info->m;
     ll n = info->n;
@@ -25,7 +25,7 @@ void simplified_dgemv_col_bench(benchmark_info *info)
     free(out);
 }
 
-void simplified_dgemv_row_bench(benchmark_info *info)
+void simplified_dgemv_row_bench(BenchmarkInfo *info)
 {
     ll m = info->m;
     ll n = info->n;
@@ -44,7 +44,7 @@ void simplified_dgemv_row_bench(benchmark_info *info)
     free(out);
 }
 
-void simplified_dger_row_bench(benchmark_info *info)
+void simplified_dger_row_bench(BenchmarkInfo *info)
 {
     ll m = info->m;
     ll n = info->n;
@@ -62,7 +62,7 @@ void simplified_dger_row_bench(benchmark_info *info)
     free(y);
 }
 
-void simplified_dger_col_bench(benchmark_info *info)
+void simplified_dger_col_bench(BenchmarkInfo *info)
 {
     ll m = info->m;
     ll n = info->n;

@@ -17,7 +17,6 @@ enum Blas_Functions {
     SDGEMV_R,
     SDGER_C,
     SDGER_R,
-    INVALID_FUNC,
 };
 
 enum Blas_Function_Level {
@@ -31,7 +30,7 @@ typedef struct {
     ll iteration;
     ll cache_warmup;
     enum Blas_Functions f;
-} benchmark_info;
+} BenchmarkInfo;
 
 typedef struct {
     double warmup_time;
@@ -39,12 +38,30 @@ typedef struct {
     ll flops;
     ll array_length;
     double *time_records;
-} benchmark_result;
+} BenchmarkResult;
 
-typedef void (*Benchmark_Func)(benchmark_info *info);
-
+typedef void (*Benchmark_Func)(BenchmarkInfo *info);
 enum Blas_Functions convert(char *str);
 char *convert_blas_func_to_str(enum Blas_Functions f);
-enum Blas_Function_Level get_func_level(enum Blas_Functions f);
+
+inline enum Blas_Function_Level get_func_level(enum Blas_Functions f)
+{
+    switch (f) {
+    case AXPY:
+    case COPY:
+    case DOT:
+    case NRM2:
+    case SCAL:
+    case SWAP:
+        return VEC_VEC;
+    case SDGEMV_C:
+    case SDGEMV_R:
+    case SDGER_C:
+    case SDGER_R:
+        return VEC_MAT;
+    default:
+        return VEC_VEC;
+    }
+}
 
 #endif

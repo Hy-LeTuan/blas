@@ -140,8 +140,8 @@ void simplified_dger_col_test(ll m, ll n)
 int main()
 {
     ll m, n;
-    m = 3;
-    n = 2;
+    m = 3000;
+    n = 2000;
 
     simplified_gemv_row_array_test(m, n);
     simplified_gemv_col_array_test(m, n);

@@ -2,14 +2,13 @@
 #include <bench.h>
 #include <blas_types.h>
 #include <error_messages.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <vector_vector_ops_bench.h>
 
 static int parse_opt(int key, char *arg, struct argp_state *state)
 {
-    benchmark_info *info_ref = state->input;
+    BenchmarkInfo *info_ref = state->input;
 
     switch (key) {
     case 'n':
@@ -42,11 +41,8 @@ int main(int argc, char *argv[])
 {
     srand(time(NULL));
 
-    benchmark_info info = {.n = 1000,
-                           .m = 1000,
-                           .f = INVALID_FUNC,
-                           .iteration = 500,
-                           .cache_warmup = 100};
+    BenchmarkInfo info = {
+            .n = 1000, .m = 1000, .iteration = 500, .cache_warmup = 100, .f = AXPY};
 
     struct argp_option options[] = {
             {"first", 'n', "NUM", OPTION_ARG_OPTIONAL,
@@ -61,17 +57,13 @@ int main(int argc, char *argv[])
             {"function", 'f', "STRING", 0,
              "The name of the testing function. Available functions include: "
              "Vector - Vector: axpy, dot, copy, scal, swap, nrm2 | Vector - Matrix: "
-             "sdgemv_c, sdgemv_r, sdger_c, sdger_r"},
+             "sdgemv_c, sdgemv_r, sdger_c, sdger_r. The default function is axpy"},
             {0}};
 
     struct argp argp = {options, parse_opt, "FUNCTION"};
 
     if (argp_parse(&argp, argc, argv, 0, 0, &info) != 0) {
-        return 1;
-    }
-    else if (info.f == INVALID_FUNC) {
-        printf(ERROR_NO_FUNCTION_FOUND);
-        return 1;
+        return EXIT_FAILURE;
     }
 
     bench(&info);

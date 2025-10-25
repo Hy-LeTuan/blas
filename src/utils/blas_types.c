@@ -1,4 +1,7 @@
 #include <blas_types.h>
+#include <error_messages.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 enum Blas_Functions convert(char *str)
@@ -44,7 +47,8 @@ enum Blas_Functions convert(char *str)
         return SDGER_R;
     }
     else {
-        return INVALID_FUNC;
+        fprintf(stderr, ERROR_INVALID_FUNCTION);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -63,8 +67,6 @@ char *convert_blas_func_to_str(enum Blas_Functions f)
         return "SCAL";
     case SWAP:
         return "SWAP";
-    case INVALID_FUNC:
-        return "INVALID FUNCTION";
     case SDGEMV_C:
         return "SDGEMV_C";
         break;
@@ -78,27 +80,9 @@ char *convert_blas_func_to_str(enum Blas_Functions f)
         return "SDGER_R";
         break;
     default:
-        return "INVALID FUNCTION";
+        fprintf(stderr, ERROR_INTERNAL_INVALID_FUNCTION);
+        exit(EXIT_FAILURE);
     }
 }
 
-enum Blas_Function_Level get_func_level(enum Blas_Functions f)
-{
-    switch (f) {
-    case AXPY:
-    case COPY:
-    case DOT:
-    case NRM2:
-    case SCAL:
-    case SWAP:
-        return VEC_VEC;
-    case SDGEMV_C:
-    case SDGEMV_R:
-    case SDGER_C:
-    case SDGER_R:
-        return VEC_MAT;
-    case INVALID_FUNC:
-    default:
-        return VEC_VEC;
-    }
-}
+extern enum Blas_Function_Level get_func_level(enum Blas_Functions f);

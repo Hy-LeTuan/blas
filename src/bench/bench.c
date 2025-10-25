@@ -36,7 +36,6 @@ Benchmark_Func get_bench_function(enum Blas_Functions f)
         return &simplified_dger_col_bench;
     case SDGER_R:
         return &simplified_dger_row_bench;
-    case INVALID_FUNC:
     default:
         return NULL;
     }
@@ -48,21 +47,21 @@ Benchmark_Func get_bench_function(enum Blas_Functions f)
  * The main function to run the benchmark. From this function, other functions
  * that could actually handle the function running is called.
  */
-void bench(benchmark_info *info) { run_function(info); }
+void bench(BenchmarkInfo *info) { run_function(info); }
 
 /*
  * The actuator function to run the specificed function from `info` with all the
  * specified arguments.
  */
-void run_function(benchmark_info *info)
+void run_function(BenchmarkInfo *info)
 {
     double time;
     Benchmark_Func f = get_bench_function(info->f);
-    benchmark_result res = {.run_time = 0.0,
-                            .warmup_time = 0.0,
-                            .array_length = info->iteration,
-                            .flops = calculate_flops(info, info->f),
-                            .time_records = malloc(sizeof(double) * info->iteration)};
+    BenchmarkResult res = {.run_time = 0.0,
+                           .warmup_time = 0.0,
+                           .array_length = info->iteration,
+                           .flops = calculate_flops(info, info->f),
+                           .time_records = malloc(sizeof(double) * info->iteration)};
 
     for (ll i = 0; i < info->cache_warmup; i++) {
         time = time_function(info, f);
@@ -81,7 +80,7 @@ void run_function(benchmark_info *info)
     free(res.time_records);
 }
 
-void display_result(benchmark_info *info, benchmark_result *res)
+void display_result(BenchmarkInfo *info, BenchmarkResult *res)
 {
     double total_warmup_time = 0.0;
     double total_execution_time = 0.0;

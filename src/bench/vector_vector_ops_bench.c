@@ -6,7 +6,7 @@
 #include <vector_vector_ops.h>
 #include <vector_vector_ops_bench.h>
 
-void axpy_bench(benchmark_info *info)
+void axpy_bench(BenchmarkInfo *info)
 {
     ll n = info->n;
 
@@ -24,7 +24,7 @@ void axpy_bench(benchmark_info *info)
     free(res);
 }
 
-void dot_bench(benchmark_info *info)
+void dot_bench(BenchmarkInfo *info)
 {
     ll n = info->n;
 
@@ -40,7 +40,7 @@ void dot_bench(benchmark_info *info)
     free(b);
 }
 
-void swap_bench(benchmark_info *info)
+void swap_bench(BenchmarkInfo *info)
 {
     ll n = info->n;
 
@@ -66,7 +66,7 @@ void swap_bench(benchmark_info *info)
     free(old_b);
 }
 
-void copy_bench(benchmark_info *info)
+void copy_bench(BenchmarkInfo *info)
 {
     ll n = info->n;
 
@@ -80,7 +80,7 @@ void copy_bench(benchmark_info *info)
     free(b);
 }
 
-void scal_bench(benchmark_info *info)
+void scal_bench(BenchmarkInfo *info)
 {
     ll n = info->n;
 
@@ -94,7 +94,7 @@ void scal_bench(benchmark_info *info)
     free(b);
 }
 
-void nrm2_bench(benchmark_info *info)
+void nrm2_bench(BenchmarkInfo *info)
 {
     ll n = info->n;
 
